@@ -1,81 +1,69 @@
-AWS Image Optimization Pipeline (S3 + Lambda + Sharp)
+# 🖼️ AWS Image Optimization Pipeline  
+### Amazon S3 + AWS Lambda + Sharp (Node.js 20)
 
-A production-ready, serverless Image Optimization System that automatically compresses, converts, and optimizes images using:
+A production-ready, serverless Image Optimization System that automatically **compresses, converts, and optimizes images** using AWS services.
 
-Amazon S3
+This pipeline reduces image size by **70–90%** while keeping high visual quality.
 
-AWS Lambda (Node.js 20)
+---
 
-Sharp (Lambda Layer)
+## 🚀 Tech Stack (AWS Services Used)
 
-S3 Event Notifications
+- **Amazon S3** – stores raw & optimized images  
+- **AWS Lambda (Node.js 20)** – image processing  
+- **Sharp (Lambda Layer)** – compression engine  
+- **S3 Event Notifications** – triggers Lambda  
+- **CloudWatch Logs** – monitoring  
+- **IAM Roles** – secure access for S3 + Logs  
 
-CloudWatch Logs
+---
 
-IAM Roles
+## ✨ Features
 
-This pipeline reduces image size by 70–90% while keeping high visual quality.
+- 🔄 Automatic image optimization  
+- 🗜️ Reduces size while preserving quality  
+- 🔧 Converts all images to **WebP**  
+- ⚡ Fully serverless (no EC2 needed)  
+- 📂 Raw → Processed flow using folders:
+  - `raw/` (input)
+  - `optimized/` (output)
 
-🚀 Features
-✔ Automatic image processing
+---
 
-Upload any image to the raw/ folder → Lambda automatically:
+## 📁 S3 Folder Structure
 
-Compresses the image
+```
+/image-project-demo
+    /raw
+        image1.jpg
+        image2.png
+        
+    /optimized
+        image1.webp
+        image2.webp
+```
 
-Converts to modern WebP
+---
 
-Removes metadata
+## 📐 Architecture
 
-Resizes large images
+```
+User Upload → S3 (raw/)
+           → S3 Event Trigger
+           → Lambda (Sharp Compress)
+           → S3 (optimized/)
+           → Public URL (used by client/UI)
+```
 
-Produces browser-friendly output
+---
 
-✔ Public optimized images
+## 🧠 How It Works
 
-Images inside optimized/ are publicly accessible.
+1. User uploads an image to **S3 → raw/**
+2. S3 triggers Lambda automatically
+3. Lambda downloads the image
+4. Sharp compresses & converts to **WebP**
+5. Lambda uploads result to **optimized/**
+6. Final optimized image is publicly accessible
 
-✔ Raw images stay private
-
-Images inside raw/ remain non-public for security.
-
-✔ Fully Serverless
-
-No EC2, no servers, zero maintenance.
-
-🏗️ Architecture
-                 ┌──────────────┐
-                 │   User/Client│
-                 └──────┬───────┘
-                        │ Upload
-                        ▼
-                ┌───────────────────┐
-                │   S3 Bucket       │
-                │ raw/optimized/    │
-                └──────┬────────────┘
-                       │  S3 Event: ObjectCreated
-                       ▼
-                ┌───────────────────┐
-                │   AWS Lambda      │
-                │  (Node.js + Sharp)│
-                └──────┬────────────┘
-                       │ Optimized image
-                       ▼
-                ┌───────────────────┐
-                │ S3 public folder  │
-                │ optimized/        │
-                └──────┬────────────┘
-                       │ Public URL
-                       ▼
-                ┌───────────────────┐
-                │ Browser / Client  │
-                └───────────────────┘
-
-🧰 Tech Stack
-Component	Technology
-Compute	AWS Lambda (Node.js 20)
-Storage	Amazon S3
-Trigger	S3 Event Notification
-Processing	Sharp (via Lambda Layer)
-Logs	CloudWatch
-IAM	Custom Lambda Role
+---
